@@ -10,6 +10,7 @@ class ViajesCrewBasic:
     agents_config = "./config/agents.yaml"
     tasks_config = "./config/tasks.yaml"
 
+    # agents configs
     @agent
     def vuelos(self) -> Agent:
         return Agent(config=self.agents_config["vuelos"])
@@ -34,6 +35,7 @@ class ViajesCrewBasic:
     def itinerario(self) -> Agent:
         return Agent(config=self.agents_config["itinerario"])
 
+    # tasks configs
     @task
     def vuelos_task(self) -> Task:
         return Task(config=self.tasks_config["vuelos_task"])
@@ -46,7 +48,6 @@ class ViajesCrewBasic:
     def actividades_task(self) -> Task:
         return Task(config=self.tasks_config["actividades_task"])
 
-    
     @task
     def transporte_task(self) -> Task:
         return Task(config=self.tasks_config["transporte_task"])
@@ -59,6 +60,7 @@ class ViajesCrewBasic:
     def itinerario_task(self) -> Task:
         return Task(
             config=self.tasks_config["itinerario_task"],
+            # esta tarea depende de todas las anteriores
             context=[self.vuelos_task(), self.alojamiento_task(), self.actividades_task(), self.transporte_task()],
         )
 
@@ -67,6 +69,6 @@ class ViajesCrewBasic:
         return Crew(
             agents=[self.vuelos(), self.alojamiento(), self.actividades(), self.transporte(), self.itinerario()],
             tasks=[self.vuelos_task(), self.alojamiento_task(), self.actividades_task(), self.transporte_task(), self.itinerario_task()],
-            process=Process.sequential,
+            process=Process.sequential, # indica que las tareas indicadas arriba ^ se ejecutarán en este orden
             verbose=True
         )
